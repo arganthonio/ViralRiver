@@ -1,6 +1,36 @@
 # ViralRiver
 
 **ViralRiver** is a modular RNA-seq virome analysis workflow designed for the detection, assembly, rescue, and quantification of low-abundance viral sequences from host-dominated transcriptomic datasets.
+The pipeline was developed to characterize the plasma and PBMC-associated virome in individuals at risk of HIV-1 infection, but it can be applied to any paired-end RNA-seq dataset.
+
+**ViralRiver** combines:
+
+* Taxonomic screening,
+* *De novo* assembly,
+* Stringent host depletion,
+* Sensitive viral rescue mapping,
+* And quantitative viral profiling
+
+into a fully automated and reproducible workflow.
+
+## Features
+
+### Biological & Analytical Capabilities
+* **Detection of low-abundance viral transcripts** from RNA-seq data.
+* **Versatile sample compatibility:** Optimized for plasma, PBMC, tissue, and bulk RNA-seq.
+* **Quantification of viral abundance** to build accurate taxonomic expression matrices.
+* **Recovery of fully assembled viral contigs** for downstream evolutionary or variant analysis.
+
+### Automated Computational Workflow
+* **Automated host depletion** via strict cross-alignment against the `hg38` reference genome.
+* **Kraken2-based viral candidate extraction** utilizing customizable taxonomic identifiers (TaxIDs).
+* **Robust *de novo* assembly** powered by MEGAHIT to reconstruct non-host fragments.
+* **Dual-engine sensitive viral rescue** integrating both Minimap2 and Bowtie2 mapping strategies.
+
+### Architecture & Deployment
+* **Modular architecture:** Clean separation of software logic, runtime environments, and data references.
+* **Nextflow-ready workflow:** Out-of-the-box support for parallel processing, pipeline resuming (`-resume`), and containerization.
+* **Turnkey references:** Includes a curated human virome reference database ready for deployment.
 
 ## Workflow Overview
 
@@ -16,11 +46,46 @@ Module 3: Bowtie2 sensitive rescue
 Final virome abundance tables + rescued reads + viral contigs
 ```
 
-## Installation
+# Installation
+
+## Requirements
+
+ViralRiver requires:
+
+- Conda or Miniconda
+- Nextflow (>=22.10)
+
+All other software dependencies are installed automatically through the provided Conda environment, including:
+
+- fastp
+- Kraken2
+- MEGAHIT
+- BWA
+- Bowtie2
+- Minimap2
+- Samtools
+- SeqKit
+- Python ≥ 3.8
+- Biopython
+
+## Create environment
 
 ```bash
 conda env create -f environment.yml
+```
+
+## Activate environment
+
+```bash
 conda activate viralriver
+```
+
+## Verify installation
+
+```bash
+nextflow -version
+fastp --version
+kraken2 --version
 ```
 
 ## Input Format
