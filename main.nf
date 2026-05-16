@@ -1,0 +1,116 @@
+nextflow.enable.dsl=2
+
+if( !params.hg38 ) {
+    error "Please provide hg38 FASTA using --hg38 /path/to/hg38.fa"
+}
+
+workflow {
+
+    Channel
+        .fromPath(params.samples)
+        .splitCsv(header: true)
+        .map { row ->
+            tuple(
+                row.sample,
+                file(row.fastq_1),
+                file(row.fastq_2)
+            )
+        }
+        .set { reads_ch }
+
+    module1_out = MODULE1(reads_ch)
+
+    MODULE2(module1_out.candidate_reads)
+    MODULE3(module1_out.candidate_reads)
+}
+
+process MODULE1 {
+
+    tag "$sample"
+
+    publishDir "${params.outdir}/module1", mode: 'copy'
+
+    input:
+    tuple val(sample), path(read1), path(read2)
+
+    output:
+    tuple val(sample),
+          path("${sample}/${sample}_candidate_reads_1.fq.gz"),
+          path("${sample}/${sample}_candidate_reads_2.fq.gz"),
+          emit: candidate_reads
+
+    script:
+    """
+    mkdir -p input ${sample}
+
+    ln -s ${read1} input/${sample}_1.fastq.gz
+    ln -s ${read2} input/${sample}_2.fastq.gz
+
+    ViralRiver.module1.sh \\
+      -i input \\
+      -o . \\
+      -d ${params.kraken_db} \\
+      -r ${params.host_ref} \\
+      -t ${task.cpus} \\
+      -x ${params.kraken_taxid}
+    """
+}
+
+process MODULE2 {
+
+    tag "$sample"
+
+    publishDir "${params.outdir}/module2", mode: 'copy'
+
+    input:
+    tuple val(sample), path(read1), path(read2)
+
+    output:
+    path("${sample}/${sample}_viral_counts.tsv"), emit: minimap2_counts
+    path("${sample}/${sample}_rescued_viral_reads.fasta"), emit: minimap2_fasta
+
+    script:
+    """
+    mkdir -p ${sample}
+
+    cp ${read1} ${sample}/${sample}_candidate_reads_1.fq.gz
+    cp ${read2} ${sample}/${sample}_candidate_reads_2.fq.gz
+
+    ViralRiver.module2.sh \\
+      -i . \\
+      -o . \\
+      -v ${params.viral_fasta} \\
+      -r ${params.host_ref} \\
+      -t ${task.cpus} \\
+      -q ${params.mapq_minimap2}
+    """
+}
+
+process MODULE3 {
+
+    tag "$sample"
+
+    publishDir "${params.outdir}/module3", mode: 'copy'
+
+    input:
+    tuple val(sample), path(read1), path(read2)
+
+    output:
+    path("${sample}/${sample}_bowtie2_viral_counts.tsv"), emit: bowtie2_counts
+    path("${sample}/${sample}_rescued_high_qual_reads.fasta"), emit: bowtie2_fasta
+
+    script:
+    """
+    mkdir -p ${sample}
+
+    cp ${read1} ${sample}/${sample}_candidate_reads_1.fq.gz
+    cp ${read2} ${sample}/${sample}_candidate_reads_2.fq.gz
+
+    ViralRiver.module3.sh \\
+      -i . \\
+      -o . \\
+      -v ${params.viral_fasta} \\
+      -t ${task.cpus} \\
+      -q ${params.mapq_bowtie2}
+    """
+}

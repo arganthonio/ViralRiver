@@ -1,0 +1,35 @@
+# ==============================================================================
+# ViralRiver Global Configuration File
+# ==============================================================================
+
+threads: 8
+
+# Input / output
+raw_dir: "/path/to/fastq"
+out_dir: "/path/to/results"
+tmp_dir: "/path/to/tmp_work"
+samples: "samples.tsv"
+
+# Reference data
+ref_host_genome: "/path/to/refs/hg38/hg38_full.fa"
+kraken_db: "/path/to/refs/kraken_humanvirus_db"
+viral_db_fasta: "/path/to/refs/core_virome/human.virus.selected.fasta"
+
+# Reference indices
+bwa_hg38_prefix: "/path/to/refs/hg38/hg38_full.fa"
+minimap2_viral_index: "/path/to/refs/core_virome/human.virus.selected.fasta.mmi"
+bowtie2_viral_prefix: "/path/to/refs/core_virome/human.virus.selected_idx"
+blast_viral_prefix: "/path/to/refs/core_virome/human.virus.selected"
+
+# KrakenTools
+extract_kraken_reads: "/path/to/KrakenTools/extract_kraken_reads.py"
+
+# Pipeline parameters
+kraken_taxid: 1          # Broad extraction. Use 10239 for strict NCBI Viruses mode.
+kraken_confidence: 0
+fastp_complexity_threshold: 30
+samtools_mapq_threshold: 25
+megahit_min_contig_len: 150
+
+# MEGAHIT parameters
+megahit_k_list: "21,33,55,77"

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: ViralRiver: RNA-seq virome analysis workflow for the detection, assembly, rescue, and quantification of low-abundance viral sequences from host-dominated transcriptomic datasets.
+message: "If you use ViralRiver, please cite:"
+authors:
+  - family-names: Caruz Arcos
+    given-names: Antonio José
+version: 1.0.0
+date-released: 2025-01-01
+license: MIT
