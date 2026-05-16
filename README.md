@@ -70,13 +70,17 @@ All other software dependencies are installed automatically through the provided
 
 ## Requirements 2
 
-Reference Databases
-The full hg38 genome and Kraken2 databases are not distributed through GitHub due to size limitations.
-
-Users must download or build:
+Due to GitHub size limitations, the complete hg38 reference genome is not distributed with the repository and must be downloaded separately.
 
 - hg38 reference genome
-- Kraken2 human-virus database
+
+## Included reference resources
+
+ViralRiver includes:
+
+- curated human core virome reference FASTA
+- prebuilt Minimap2 and Bowtie2 indexes
+- lightweight Kraken2 human-virus database
 
 ## Create environment
 
