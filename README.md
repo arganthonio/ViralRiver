@@ -48,7 +48,7 @@ Final virome abundance tables + rescued reads + viral contigs
 
 # Installation
 
-## Requirements
+## Requirements 1
 
 ViralRiver requires:
 
@@ -67,6 +67,16 @@ All other software dependencies are installed automatically through the provided
 - SeqKit
 - Python ≥ 3.8
 - Biopython
+
+## Requirements 2
+
+Reference Databases
+The full hg38 genome and Kraken2 databases are not distributed through GitHub due to size limitations.
+
+Users must download or build:
+
+- hg38 reference genome
+- Kraken2 human-virus database
 
 ## Create environment
 
