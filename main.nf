@@ -22,6 +22,8 @@ workflow {
 
     MODULE2(module1_out.candidate_reads)
     MODULE3(module1_out.candidate_reads)
+
+    MODULE4_DEPTH(module1_out.fastp_json.collect())
 }
 
 process MODULE1 {
@@ -38,6 +40,9 @@ process MODULE1 {
           path("${sample}/${sample}_candidate_reads_1.fq.gz"),
           path("${sample}/${sample}_candidate_reads_2.fq.gz"),
           emit: candidate_reads
+
+    path("${sample}/fastp_reports/${sample}_fastp.json"),
+          emit: fastp_json
 
     script:
     """
@@ -112,5 +117,27 @@ process MODULE3 {
       -v ${params.viral_fasta} \\
       -t ${task.cpus} \\
       -q ${params.mapq_bowtie2}
+    """
+}
+
+process MODULE4_DEPTH {
+
+    publishDir "${params.outdir}/module4_depth", mode: 'copy'
+
+    input:
+    path fastp_jsons
+
+    output:
+    path("viralriver_read_depth.tsv"), emit: read_depth
+
+    script:
+    """
+    mkdir -p module1_fastp_jsons
+
+    cp ${fastp_jsons} module1_fastp_jsons/
+
+    ViralRiver.module4.depth.sh \\
+      -i module1_fastp_jsons \\
+      -o viralriver_read_depth.tsv
     """
 }
