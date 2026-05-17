@@ -1,5 +1,10 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20254960.svg)](https://doi.org/10.5281/zenodo.20254960)
 # ViralRiver
+
+Software DOI:
+https://doi.org/10.5281/zenodo.20254960
+
+hg38 reference bundle DOI:
+https://doi.org/10.5281/zenodo.20255121
 
 **ViralRiver** is a modular RNA-seq virome analysis workflow designed for the detection, assembly, rescue, and quantification of low-abundance viral sequences from host-dominated transcriptomic datasets.
 The pipeline was developed to characterize the plasma and PBMC-associated virome in individuals at risk of HIV-1 infection, but it can be applied to any paired-end RNA-seq dataset.
