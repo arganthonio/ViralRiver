@@ -85,7 +85,7 @@ A pre-indexed hg38 reference genome compatible with ViralRiver is available from
 Download:
 
 ```bash
-wget 20254960/ViralRiver_hg38_reference_bundle_v1.0.tar.gz
+wget https://zenodo.org/records/20255121/files/ViralRiver_hg38_reference_bundle_v1.0.tar.gz
 tar -xzf ViralRiver_hg38_reference_bundle_v1.0.tar.gz
 ```
 
