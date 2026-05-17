@@ -73,9 +73,16 @@ All other software dependencies are installed automatically through the provided
 
 ## Requirements 2
 
-Due to GitHub size limitations, the complete hg38 reference genome is not distributed with the repository and must be downloaded separately.
+### hg38 reference bundle
 
-- hg38 reference genome
+A pre-indexed hg38 reference genome compatible with ViralRiver is available from Zenodo.
+
+Download:
+
+```bash
+wget 20254960/ViralRiver_hg38_reference_bundle_v1.0.tar.gz
+tar -xzf ViralRiver_hg38_reference_bundle_v1.0.tar.gz
+```
 
 ## Included reference resources
 
