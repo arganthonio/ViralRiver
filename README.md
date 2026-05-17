@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20254960.svg)](https://doi.org/10.5281/zenodo.20254960)
 # ViralRiver
 
 **ViralRiver** is a modular RNA-seq virome analysis workflow designed for the detection, assembly, rescue, and quantification of low-abundance viral sequences from host-dominated transcriptomic datasets.
