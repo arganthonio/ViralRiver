@@ -43,6 +43,8 @@ Module 2: Minimap2 viral quantification
         ↓
 Module 3: Bowtie2 sensitive rescue
         ↓
+Module 4 extracts per-sample total RNA-seq read depth from fastp reports and generates a table required for RPM normalization.
+        ↓
 Final virome abundance tables + rescued reads + viral contigs
 ```
 
@@ -118,11 +120,34 @@ sample,fastq_1,fastq_2
 SRR000001,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 SRR000002,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 ```
+## Example Public RNA-seq Datasets
 
-## Run
+Example paired-end FASTQ files can be downloaded directly from the European Nucleotide Archive (ENA):
 
 ```bash
-nextflow run main.nf --samples samples.csv
+# Example 1
+curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_1.fastq.gz"
+curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_2.fastq.gz"
+
+# Example 2
+curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_1.fastq.gz"
+curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_2.fastq.gz"
+```
+
+Example `samples.csv`:
+
+```csv
+sample,fastq_1,fastq_2
+SRR16948824,SRR16948824_1.fastq.gz,SRR16948824_2.fastq.gz
+SRR32014171,SRR32014171_1.fastq.gz,SRR32014171_2.fastq.gz
+```
+
+## Run ViralRiver:
+
+```bash
+nextflow run main.nf \
+  --samples samples.csv \
+  --hg38 /path/to/hg38_full.fa
 ```
 
 ## Outputs
