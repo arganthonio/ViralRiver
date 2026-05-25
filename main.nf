@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
-if( !params.hg38 ) {
-    error "Please provide hg38 FASTA using --hg38 /path/to/hg38.fa"
+if( !params.host_ref ) {
+    error "Please provide host reference FASTA using --host_ref /path/to/hg38.fa"
 }
 
 workflow {
@@ -20,8 +20,11 @@ workflow {
 
     module1_out = MODULE1(reads_ch)
 
-    MODULE2(module1_out.candidate_reads)
-    MODULE3(module1_out.candidate_reads)
+    candidate_reads_m2 = module1_out.candidate_reads
+    candidate_reads_m3 = module1_out.candidate_reads
+
+    MODULE2(candidate_reads_m2)
+    MODULE3(candidate_reads_m3)
 
     MODULE4_DEPTH(module1_out.fastp_json.collect())
 }
