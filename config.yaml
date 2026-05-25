@@ -5,15 +5,14 @@
 threads: 8
 
 # Input / output
-raw_dir: "/path/to/fastq"
-out_dir: "/path/to/results"
-tmp_dir: "/path/to/tmp_work"
 samples: "samples.tsv"
+outdir: "results"
+tmp_dir: "work"
 
 # Reference data
-ref_host_genome: "/path/to/refs/hg38/hg38_full.fa"
+host_ref: "/path/to/refs/hg38/hg38_full.fa"
 kraken_db: "/path/to/refs/kraken_humanvirus_db"
-viral_db_fasta: "/path/to/refs/core_virome/human.virus.selected.fasta"
+viral_fasta: "/path/to/refs/core_virome/human.virus.selected.fasta"
 
 # Reference indices
 bwa_hg38_prefix: "/path/to/refs/hg38/hg38_full.fa"
@@ -25,10 +24,11 @@ blast_viral_prefix: "/path/to/refs/core_virome/human.virus.selected"
 extract_kraken_reads: "/path/to/KrakenTools/extract_kraken_reads.py"
 
 # Pipeline parameters
-kraken_taxid: 1          # Broad extraction. Use 10239 for strict NCBI Viruses mode.
+kraken_taxid: 1
 kraken_confidence: 0
 fastp_complexity_threshold: 30
-samtools_mapq_threshold: 25
+mapq_minimap2: 25
+mapq_bowtie2: 25
 megahit_min_contig_len: 150
 
 # MEGAHIT parameters
