@@ -26,8 +26,9 @@ workflow {
     MODULE2(candidate_reads_m2)
     MODULE3(candidate_reads_m3)
 
-    MODULE4_DEPTH(module1_out.fastp_json.collect())
+    MODULE4(module1_out.fastp_json.collect())
 }
+
 process MODULE1 {
 
     tag "$sample"
@@ -53,7 +54,7 @@ process MODULE1 {
     ln -s ${read1} input/${sample}_1.fastq.gz
     ln -s ${read2} input/${sample}_2.fastq.gz
 
-    ViralRiver.module1.sh \\
+   ${projectDir}/bin/ViralRiver.module.1.sh \\
       -i input \\
       -o . \\
       -d ${params.kraken_db} \\
@@ -83,7 +84,7 @@ process MODULE2 {
     cp ${read1} ${sample}/${sample}_candidate_reads_1.fq.gz
     cp ${read2} ${sample}/${sample}_candidate_reads_2.fq.gz
 
-    ViralRiver.module2.sh \\
+    ${projectDir}/bin/ViralRiver.module.2.sh \\
       -i . \\
       -o . \\
       -v ${params.viral_fasta} \\
@@ -113,7 +114,7 @@ process MODULE3 {
     cp ${read1} ${sample}/${sample}_candidate_reads_1.fq.gz
     cp ${read2} ${sample}/${sample}_candidate_reads_2.fq.gz
 
-    ViralRiver.module3.sh \\
+    ${projectDir}/bin/ViralRiver.module.3.sh \\
       -i . \\
       -o . \\
       -v ${params.viral_fasta} \\
@@ -122,7 +123,7 @@ process MODULE3 {
     """
 }
 
-process MODULE4_DEPTH {
+process MODULE4 {
 
     publishDir "${params.outdir}/module4_depth", mode: 'copy'
 
@@ -138,8 +139,9 @@ process MODULE4_DEPTH {
 
     cp ${fastp_jsons} module1_fastp_jsons/
 
-    ViralRiver.module4.depth.sh \\
+    ${projectDir}/bin/ViralRiver.module.4.sh \\
       -i module1_fastp_jsons \\
       -o viralriver_read_depth.tsv
     """
 }
+
