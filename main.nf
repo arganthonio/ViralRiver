@@ -51,8 +51,8 @@ process MODULE1 {
     """
     mkdir -p input ${sample}
 
-    ln -s ${read1} input/${sample}_1.fastq.gz
-    ln -s ${read2} input/${sample}_2.fastq.gz
+    cp ${read1} input/${sample}_1.fastq.gz
+    cp ${read2} input/${sample}_2.fastq.gz
 
    ${projectDir}/bin/ViralRiver.module.1.sh \\
       -i input \\
