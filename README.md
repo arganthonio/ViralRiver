@@ -159,10 +159,10 @@ SRR32014171,SRR32014171_1.fastq.gz,SRR32014171_2.fastq.gz
 
 ```bash
 nextflow run main.nf \
-  --samples /samples.csv \
-  --host_ref /ref_hg38/hg38_full.fa \
-  --viral_fasta /viral_master/human.virus.selected.fasta \
-  --kraken_db /kraken_humanvirus_db \
+  --samples /path/to/samples.csv \
+  --host_ref /path/to/ref_hg38/hg38_full.fa \
+  --viral_fasta /path/to/viral_master/human.virus.selected.fasta \
+  --kraken_db /path/to/kraken_humanvirus_db \
   -with-conda
 ```
 
