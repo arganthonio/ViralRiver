@@ -1,10 +1,10 @@
 nextflow.enable.dsl=2
 
-if( !params.host_ref ) {
-    error "Please provide host reference FASTA using --host_ref /path/to/hg38.fa"
-}
-
 workflow {
+
+    if( !params.host_ref ) {
+        error "Please provide host reference FASTA using --host_ref /path/to/hg38.fa"
+    }
 
     Channel
         .fromPath(params.samples)
@@ -28,7 +28,6 @@ workflow {
 
     MODULE4_DEPTH(module1_out.fastp_json.collect())
 }
-
 process MODULE1 {
 
     tag "$sample"
