@@ -1,0 +1,22 @@
+# Nextflow
+work/
+.nextflow/
+.nextflow*
+*.nextflow.log
+
+# Outputs
+results/
+*.html
+*.zip
+
+# Conda
+.conda/
+conda-env/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
