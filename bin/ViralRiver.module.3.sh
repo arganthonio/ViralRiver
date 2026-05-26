@@ -63,7 +63,7 @@ mkdir -p "$OUTPUT_DIR"
 # ------------------------------------------------------------------------------
 
 REF_DIR=$(dirname "$VIRAL_DB_FASTA")
-DB_NAME=$(basename "${VIRAL_DB_FASTA%.*}")_bt2_idx
+DB_NAME="human.virus.selected_idx"
 BT2_PREFIX="${REF_DIR}/${DB_NAME}"
 
 if [[ ! -f "${BT2_PREFIX}.1.bt2" && ! -f "${BT2_PREFIX}.1.bt2l" ]]; then
@@ -178,11 +178,11 @@ process_rescue() {
     samtools view \
         -@ "$THREADS" \
         -h \
-        -F 2308 \
+        -F 4 \
         -q "$MAPQ" | \
     samtools sort \
         -@ "$THREADS" \
-        -o "$BAM_TEMP" -
+        -o "$BAM_TEMP" 
 
     if [[ -s "$BAM_TEMP" ]] && [[ "$(samtools view -c "$BAM_TEMP")" -gt 0 ]]; then
 
