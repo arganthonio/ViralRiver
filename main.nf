@@ -125,7 +125,7 @@ process MODULE3 {
 
 process MODULE4 {
 
-    publishDir "${params.outdir}/module4_depth", mode: 'copy'
+    publishDir "${params.outdir}/module4", mode: 'copy'
 
     input:
     path fastp_jsons
@@ -144,4 +144,3 @@ process MODULE4 {
       -o viralriver_read_depth.tsv
     """
 }
-
