@@ -135,7 +135,7 @@ SRR000002,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 ```
 Example specific `samples.csv`: 
 
-````csv
+```csv
 sample,fastq_1,fastq_2
 SRR15413671,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_2.fastq.gz
 SRR15413654,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_2.fastq.gz
