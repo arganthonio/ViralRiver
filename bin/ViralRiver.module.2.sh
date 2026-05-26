@@ -143,11 +143,10 @@ process_quantification() {
         "$REF_GENOME" \
         "$R1" "$R2" \
         2> "${OUT_SUBDIR}/${ID}_bwa_host_depletion.log" | \
-    samtools view \
+     samtools view \
         -@ "$THREADS" \
         -b \
         -f 12 \
-        -F 2304 \
         -o "${OUT_SUBDIR}/tmp_non_host.bam" -
 
     if [[ ! -s "${OUT_SUBDIR}/tmp_non_host.bam" ]] || [[ "$(samtools view -c "${OUT_SUBDIR}/tmp_non_host.bam")" -eq 0 ]]; then
@@ -190,8 +189,7 @@ process_quantification() {
     samtools view \
         -@ "$THREADS" \
         -h \
-        -F 2308 \
-        -q "$MAPQ" \
+        -F 4 \
         -o "${OUT_SUBDIR}/tmp_viral_hits.bam" -
 
     if [[ -s "${OUT_SUBDIR}/tmp_viral_hits.bam" ]] && [[ "$(samtools view -c "${OUT_SUBDIR}/tmp_viral_hits.bam")" -gt 0 ]]; then
