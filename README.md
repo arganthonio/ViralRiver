@@ -126,13 +126,23 @@ SAMPLE_1.fastq.gz
 SAMPLE_2.fastq.gz
 ```
 
-Example `samples.csv`:
+Example general `samples.csv`:
 
 ```csv
 sample,fastq_1,fastq_2
 SRR000001,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 SRR000002,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 ```
+Example specific `samples.csv`: 
+
+```
+sample,fastq_1,fastq_2
+SRR15413671,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_2.fastq.gz
+SRR15413654,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_2.fastq.gz
+```
+
+
+
 ## Example Public RNA-seq Datasets
 
 Example paired-end FASTQ files can be downloaded directly from the European Nucleotide Archive (ENA):
