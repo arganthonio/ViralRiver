@@ -97,43 +97,12 @@ The report is automatically generated as
 results/
 └── viralriver_multiqc_report.html
 
-```
 
 and can be opened locally using any modern web browser.
 
 ---
 
-# Installation
-
-ViralRiver can be executed in two different ways.
-
-## Option 1 — Command-line (recommended for bioinformaticians)
-
-This version runs directly through Nextflow and Conda, providing full control over the workflow execution.
-
----
-
-## Option 2 — Docker graphical interface (recommended for non-expert users)
-
-A Docker image containing all software dependencies together with a Streamlit graphical interface is also available.
-
-The graphical interface allows complete analyses without requiring command-line interaction.
-
-The application automatically:
-
-- launches the ViralRiver container,
-- mounts the current working directory,
-- starts the Streamlit web server,
-- opens the interface in the default browser,
-- generates the interactive MultiQC report automatically.
-
-No software installation other than Docker Desktop is required.
-
----
-
 # Software Requirements
-
-## Command-line version
 
 ViralRiver requires:
 
@@ -159,13 +128,6 @@ Main software components include:
 - Pigz
 - Wget
 
----
-
-## Docker version
-
-Only **Docker Desktop** is required.
-
-All dependencies are already included inside the ViralRiver Docker image.
 
 ---
 
@@ -296,6 +258,8 @@ SRR16948824,SRR16948824_1.fastq.gz,SRR16948824_2.fastq.gz
 SRR32014171,SRR32014171_1.fastq.gz,SRR32014171_2.fastq.gz
 ```
 
+It is recommended to place these files in the samples directory.
+
 ---
 
 # Running ViralRiver
@@ -312,45 +276,8 @@ nextflow run main.nf \
   --kraken_db ref/kraken_db
 ```
 
-# Running ViralRiver using Docker
 
-The Docker version provides the easiest way to execute ViralRiver.
-
-Requirements:
-
-- Docker Desktop
-
-Download the Docker image:
-
-```bash
-docker pull viralriver:latest
-```
-
-Then simply execute
-
-```text
-viralriver.bat
-```
-
-The launcher automatically:
-
-- starts the ViralRiver Docker container;
-- mounts the current working directory;
-- allocates shared memory for Kraken2;
-- launches the Streamlit web interface;
-- opens the application in the default browser.
-
-The application becomes available at
-
-```text
-http://localhost:8501
-```
-
-No command-line interaction is required.
-
----
-
-# Graphical Interface
+# Running ViralRiver using Docker (Graphical Interface)
 
 The Streamlit graphical interface allows users with limited computational experience to execute complete virome analyses.
 
@@ -368,6 +295,60 @@ Insert here:
 **Figure 2. ViralRiver graphical interface.**
 
 ---
+
+## Prerequisites
+
+Make sure **Docker** is installed and running on your system before proceeding:
+* **Windows / macOS:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* **Linux:** [Docker Engine](https://docs.docker.com/engine/install/)
+
+---
+
+## Step 1: Set Up Your Working Directory
+
+Create a workspace folder on your computer (e.g., `my_analysis/`) and structure your files and subdirectories as shown below:
+
+```text
+my_analysis/
+├── viralriver.bat   <-- (or viralriver.sh for Linux/macOS)
+├── samples/         <-- Place your input paired-end FASTQ files (.fastq.gz) here
+└── ref/             <-- Downloaded from the ViralRiver repository
+    └── hg38/        <-- ⚠️ Place the human host reference (hg38_full.fa) here
+```
+
+> 💡 **Note on the `ref/` folder:** You can copy the `ref/` directory directly from the root of the [ViralRiver Repository](https://github.com/arganthonio/ViralRiver). However, you must **manually download and place** the human reference genome file (`hg38_full.fa`) inside the `ref/hg38/` subdirectory.
+
+---
+
+## Step 2: Download the Launcher Script
+
+Go to the [`docker/`](https://github.com/arganthonio/ViralRiver/tree/main/docker) directory in the GitHub repository and download the appropriate launcher script into your working directory (`my_analysis/`):
+
+* **Windows:** Download `viralriver.bat`
+* **Linux / macOS:** Download `viralriver.sh`
+
+---
+
+## Step 3: Launch the Application
+
+### On Windows
+1. Ensure **Docker Desktop** is active and running.
+2. **Double-click** `viralriver.bat` (or execute it via `cmd`).
+3. The script will automatically pull the required Docker image and open the web interface in your default browser at `http://localhost:8501`.
+
+---
+
+### On Linux / macOS
+1. Open a terminal inside your working directory (`my_analysis/`).
+2. Make the launcher script executable (only needed once):
+   ```bash
+   chmod +x viralriver.sh
+   ```
+3. Run the script:
+   ```bash
+   ./viralriver.sh
+   ```
+4. The application will pull the image and open the browser automatically at `http://localhost:8501`.
 
 # Interactive MultiQC Report
 
