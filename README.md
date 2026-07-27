@@ -291,7 +291,7 @@ The interface provides:
 - Direct access to the MultiQC report.
 
 
-![ViralRiver graphical interface](docs/images/gui.png)
+![ViralRiver graphical interface](docs/figures/gui.png)
 **Figure 2. ViralRiver graphical interface.**
 
 ---
