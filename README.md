@@ -84,21 +84,6 @@ Unlike existing virome analysis pipelines, ViralRiver emphasizes **accessibility
                          │
                          ▼
           Interactive HTML report + Output tables
-```
-
-> **Figure 1.** Overview of the ViralRiver workflow.  
-> (Replace this diagram by the workflow figure used in the manuscript.)
-
----
-
-
-The report is automatically generated as
-
-results/
-└── viralriver_multiqc_report.html
-
-
-and can be opened locally using any modern web browser.
 
 ---
 
@@ -292,7 +277,7 @@ The interface provides:
 
 
 ![ViralRiver graphical interface](docs/figures/gui.png)
-**Figure 2. ViralRiver graphical interface.**
+**Figure 1. ViralRiver graphical interface.**
 
 ---
 
@@ -383,9 +368,8 @@ viralriver_multiqc_report.html
 
 using any modern web browser.
 
-Insert here:
-
-**Figure 3. MultiQC interactive report.**
+![ViralRiver graphical interface](docs/figures/multiqc.png)
+**Figure 2. MultiQc Report.**
 
 ---
 
