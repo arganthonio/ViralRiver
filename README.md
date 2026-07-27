@@ -145,7 +145,7 @@ Place the extracted files (human reference genome files - hg38_full.fa) inside t
 
 ## Included reference resources
 
-The ViralRiver package also includes:
+The ViralRiver package also includes in ref directory:
 
 - Curated human virome reference FASTA
 - Pre-built Minimap2 indexes
