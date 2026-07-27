@@ -290,8 +290,8 @@ The interface provides:
 - Automatic report generation.
 - Direct access to the MultiQC report.
 
-Insert here:
 
+![ViralRiver graphical interface](docs/images/gui.png)
 **Figure 2. ViralRiver graphical interface.**
 
 ---
