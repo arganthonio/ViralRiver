@@ -1,6 +1,6 @@
 # 🧬 ViralRiver
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20254960.svg)](https://doi.org/10.5281/zenodo.20254960)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20254960-blue)](https://doi.org/10.5281/zenodo.20254960)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Nextflow](https://img.shields.io/badge/Nextflow-%E2%89%A526.0-brightgreen)](https://www.nextflow.io/)
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
