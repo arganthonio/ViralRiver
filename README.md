@@ -118,7 +118,11 @@ All third-party software dependencies are automatically installed from the provi
 
 ---
 
-# Reference resources
+# Resources
+
+## ViralRiver package
+
+Download this repository from Github and unzip it.
 
 ## hg38 reference bundle
 
