@@ -154,6 +154,8 @@ The ViralRiver package also includes in ref directory:
 
 # Create the Conda Environment
 
+Create the Conda ViralRiver environment. Run this sentence inside the ViralRiver directory:
+
 ```bash
 conda env create -f environment.yml
 ```
