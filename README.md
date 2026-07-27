@@ -84,7 +84,7 @@ Unlike existing virome analysis pipelines, ViralRiver emphasizes **accessibility
                          │
                          ▼
           Interactive HTML report + Output tables
-
+```
 ---
 
 # Software Requirements
