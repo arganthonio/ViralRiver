@@ -184,7 +184,6 @@ Before running ViralRiver for the first time, ensure that all shell scripts are 
 
 ```bash
 chmod +x bin/ViralRiver.module.*.sh
-chmod +x main.nf
 ```
 
 ---
