@@ -16,6 +16,10 @@ The workflow was originally developed to characterize the plasma and PBMC-associ
 
 Unlike existing virome analysis pipelines, ViralRiver emphasizes **accessibility**, **reproducibility**, and **ease of use**. The software is distributed both as a standard Nextflow workflow for bioinformaticians and as a Docker-based graphical web application that allows researchers with limited computational experience to perform complete virome analyses directly from a web browser.
 
+Software DOI:
+
+https://doi.org/10.5281/zenodo.20254960
+
 ---
 
 # Highlights
@@ -95,9 +99,7 @@ ViralRiver requires:
 - Conda or Miniconda
 - Python 3.10
 
-All third-party software dependencies are automatically installed from the provided Conda environment.
-
-Main software components include:
+All third-party software dependencies are automatically installed from the provided Conda environment. Main software components include:
 
 - fastp
 - Kraken2
@@ -117,16 +119,6 @@ Main software components include:
 ---
 
 # Reference resources
-
-Two Zenodo packages are available.
-
-## ViralRiver software
-
-Software DOI
-
-https://doi.org/10.5281/zenodo.20254960
-
----
 
 ## hg38 reference bundle
 
