@@ -183,7 +183,7 @@ bowtie2 --version
 Before running ViralRiver for the first time, ensure that all shell scripts are executable.
 
 ```bash
-chmod +x ViralRiver.module.*.sh
+chmod +x bin/ViralRiver.module.*.sh
 chmod +x main.nf
 ```
 
@@ -256,7 +256,7 @@ Run ViralRiver using Nextflow:
 
 ```bash
 nextflow run main.nf \
-  --samples exmaples/samples.csv \
+  --samples examples/samples.csv \
   --host_ref ref/hg38/hg38_full.fa \
   --viral_fasta ref/core_virome/human.virus.selected.fasta \
   --kraken_db ref/kraken_db
