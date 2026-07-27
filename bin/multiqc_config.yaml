@@ -1,0 +1,52 @@
+# MultiQC Configuration for ViralRiver
+title: "ViralRiver Quality Control Report"
+subtitle: "Viral detection pipeline"
+
+run_modules:
+  - custom_content
+  - fastp
+  - bowtie2
+  - megahit
+
+exclude_modules:
+  - kraken
+  - kraken2
+
+top_modules:
+  - custom_content
+
+custom_content_search_rules:
+  summary_minimap2:
+    fn: 'summary_minimap2_mqc.tsv'
+
+  summary_bowtie2:
+    fn: 'summary_bowtie2_mqc.tsv'
+
+custom_data:
+  summary_minimap2:
+    file_format: 'tsv'
+    section_name: 'Viral Counts (Minimap2)'
+    description: 'Number of viral reads mapped using Minimap2.'
+    plot_type: 'bargraph'
+    pconfig:
+      id: 'summary_minimap2'
+      title: 'Viral Counts (Minimap2)'
+      ylab: 'Counts'
+      tt_decimals: 0
+      decimals: false
+      xDecimals: false
+      yDecimals: false
+
+  summary_bowtie2:
+    file_format: 'tsv'
+    section_name: 'Viral Counts (Bowtie2)'
+    description: 'Number of viral reads rescued using Bowtie2.'
+    plot_type: 'bargraph'
+    pconfig:
+      id: 'summary_bowtie2'
+      title: 'Viral Counts (Bowtie2)'
+      ylab: 'Counts'
+      tt_decimals: 0
+      decimals: false
+      xDecimals: false
+      yDecimals: false
