@@ -1,163 +1,372 @@
+# 🧬 ViralRiver
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20254960.svg)](https://doi.org/10.5281/zenodo.20254960)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Nextflow](https://img.shields.io/badge/Nextflow-%E2%89%A526.0-brightgreen)](https://www.nextflow.io/)
+[![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/Docker-supported-blue.svg)](https://www.docker.com/)
+
+---
+
 # ViralRiver
 
-Software DOI:
-https://doi.org/10.5281/zenodo.20254960
+**ViralRiver** is an end-to-end RNA-seq virome analysis workflow that integrates taxonomic classification, host depletion, de novo assembly, dual viral alignment, viral rescue, abundance estimation and interactive visualization into a single reproducible pipeline.
 
-hg38 reference bundle DOI:
-https://doi.org/10.5281/zenodo.20255121
+The workflow was originally developed to characterize the plasma and PBMC-associated virome in individuals at risk of HIV-1 infection, although it can be applied to any paired-end RNA-seq dataset generated from host-dominated transcriptomic samples.
 
-**ViralRiver** is a modular RNA-seq virome analysis workflow designed for the detection, assembly, rescue, and quantification of low-abundance viral sequences from host-dominated transcriptomic datasets.
-The pipeline was developed to characterize the plasma and PBMC-associated virome in individuals at risk of HIV-1 infection, but it can be applied to any paired-end RNA-seq dataset.
+Unlike existing virome analysis pipelines, ViralRiver emphasizes **accessibility**, **reproducibility**, and **ease of use**. The software is distributed both as a standard Nextflow workflow for bioinformaticians and as a Docker-based graphical web application that allows researchers with limited computational experience to perform complete virome analyses directly from a web browser.
 
-**ViralRiver** combines:
+---
 
-* Taxonomic screening,
-* *De novo* assembly,
-* Stringent host depletion,
-* Sensitive viral rescue mapping,
-* And quantitative viral profiling
+# Highlights
 
-into a fully automated and reproducible workflow.
+✔ End-to-end RNA-seq virome workflow
 
-## Features
+✔ Quality control, taxonomic classification and host depletion
 
-### Biological & Analytical Capabilities
-* **Detection of low-abundance viral transcripts** from RNA-seq data.
-* **Versatile sample compatibility:** Optimized for plasma, PBMC, tissue, and bulk RNA-seq.
-* **Quantification of viral abundance** to build accurate taxonomic expression matrices.
-* **Recovery of fully assembled viral contigs** for downstream evolutionary or variant analysis.
+✔ De novo assembly of candidate viral contigs
 
-### Automated Computational Workflow
-* **Automated host depletion** via strict cross-alignment against the `hg38` reference genome.
-* **Kraken2-based viral candidate extraction** utilizing customizable taxonomic identifiers (TaxIDs).
-* **Robust *de novo* assembly** powered by MEGAHIT to reconstruct non-host fragments.
-* **Dual-engine sensitive viral rescue** integrating both Minimap2 and Bowtie2 mapping strategies.
+✔ Dual viral alignment using **Minimap2** and **Bowtie2**
 
-### Architecture & Deployment
-* **Modular architecture:** Clean separation of software logic, runtime environments, and data references.
-* **Nextflow-ready workflow:** Out-of-the-box support for parallel processing, pipeline resuming (`-resume`), and containerization.
-* **Turnkey references:** Includes a curated human virome reference database ready for deployment.
+✔ Sensitive viral read rescue
 
-## Workflow Overview
+✔ Viral abundance estimation
+
+✔ Interactive HTML report generated with **MultiQC**
+
+✔ Multi-sample processing through **Nextflow**
+
+✔ Browser-based graphical interface built with **Streamlit**
+
+✔ Docker image for one-click deployment
+
+✔ Fully reproducible workflow
+
+---
+
+# Workflow Overview
 
 ```text
-Raw paired-end RNA-seq
-        ↓
-Module 1: QC + Kraken2 + Assembly
-        ↓
-Module 2: Minimap2 viral quantification
-        ↓
-Module 3: Bowtie2 sensitive rescue
-        ↓
-Module 4 extracts per-sample total RNA-seq read depth from fastp reports and generates a table required for RPM normalization.
-        ↓
-Final virome abundance tables + rescued reads + viral contigs
+                Raw paired-end RNA-seq
+                         │
+                         ▼
+┌────────────────────────────────────────────────────────────┐
+│ Module 1                                                   │
+│ Quality control, taxonomic classification,                 │
+│ host depletion and de novo assembly                        │
+└────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────────────────────────┐
+│ Module 2                                                   │
+│ Viral alignment and abundance estimation                   │
+│ using Minimap2                                             │
+└────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────────────────────────┐
+│ Module 3                                                   │
+│ Sensitive viral rescue using Bowtie2                       │
+└────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────────────────────────┐
+│ Module 4                                                   │
+│ Extraction of sequencing depth from fastp reports          │
+│ and RPM normalization                                      │
+└────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────────────────────────┐
+│ Module 5                                                   │
+│ Interactive MultiQC report generation                      │
+└────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+          Interactive HTML report + Output tables
 ```
+
+> **Figure 1.** Overview of the ViralRiver workflow.  
+> (Replace this diagram by the workflow figure used in the manuscript.)
+
+---
+
+# Pipeline Modules
+
+## Module 1 – Quality control, taxonomic classification and assembly
+
+Module 1 performs the initial processing of paired-end RNA-seq reads. Quality filtering and adapter trimming are carried out using **fastp**, followed by taxonomic classification with **Kraken2** using a lightweight virus-focused database.
+
+Reads classified as viral candidates are extracted, host contamination is removed by alignment against the human reference genome (hg38), and the remaining reads are assembled using **MEGAHIT** to generate candidate viral contigs for downstream analyses.
+
+**Output**
+
+- Quality-controlled FASTQ files
+- Kraken2 classification reports
+- Candidate viral reads
+- Host-depleted reads
+- Assembled viral contigs
+
+---
+
+## Module 2 – Viral alignment with Minimap2
+
+Module 2 aligns candidate viral reads against the curated ViralRiver viral reference database using **Minimap2**.
+
+Only high-quality alignments are retained according to a user-configurable MAPQ threshold.
+
+The resulting viral abundance tables constitute the primary quantitative output of the workflow.
+
+**Output**
+
+- BAM alignments
+- Viral abundance tables
+- Viral read counts
+
+---
+
+## Module 3 – Sensitive viral rescue using Bowtie2
+
+To maximize sensitivity, Module 3 performs a second alignment using **Bowtie2**.
+
+This complementary alignment rescues viral reads that may be missed during the Minimap2 alignment because of sequence divergence or mapping ambiguity.
+
+The rescued reads provide additional evidence supporting viral detection while maintaining stringent alignment quality filters.
+
+**Output**
+
+- Bowtie2 BAM files
+- Rescued viral reads
+- Rescue abundance tables
+
+---
+
+## Module 4 – RPM normalization
+
+Module 4 automatically extracts the total number of processed RNA-seq reads from the **fastp** reports generated in Module 1.
+
+These values are summarized into a sample-level table that is subsequently used for Reads Per Million (RPM) normalization across samples.
+
+**Output**
+
+- Total read counts
+- RPM normalization table
+
+---
+
+## Module 5 – Interactive MultiQC report
+
+Module 5 automatically summarizes the outputs generated by all previous modules (except Kraken2) into a single interactive HTML report using **MultiQC**.
+
+The report enables users to explore viral abundance across samples through interactive plots and tables without requiring additional software.
+
+Users can:
+
+- Visualize viral abundance across samples.
+- Compare Minimap2 and Bowtie2 results.
+- Export publication-quality figures (PNG or SVG).
+- Download tabular data.
+- Navigate all pipeline outputs through a unified report.
+
+The report is automatically generated as
+
+```
+
+results/
+└── viralriver_multiqc_report.html
+
+```
+
+and can be opened locally using any modern web browser.
+
+---
 
 # Installation
 
-## Requirements 1
+ViralRiver can be executed in two different ways.
+
+## Option 1 — Command-line (recommended for bioinformaticians)
+
+This version runs directly through Nextflow and Conda, providing full control over the workflow execution.
+
+---
+
+## Option 2 — Docker graphical interface (recommended for non-expert users)
+
+A Docker image containing all software dependencies together with a Streamlit graphical interface is also available.
+
+The graphical interface allows complete analyses without requiring command-line interaction.
+
+The application automatically:
+
+- launches the ViralRiver container,
+- mounts the current working directory,
+- starts the Streamlit web server,
+- opens the interface in the default browser,
+- generates the interactive MultiQC report automatically.
+
+No software installation other than Docker Desktop is required.
+
+---
+
+# Software Requirements
+
+## Command-line version
 
 ViralRiver requires:
 
+- Nextflow ≥ 26
 - Conda or Miniconda
-- Nextflow (>=22.10)
+- Python 3.10
 
-All other software dependencies are installed automatically through the provided Conda environment, including:
+All third-party software dependencies are automatically installed from the provided Conda environment.
+
+Main software components include:
 
 - fastp
 - Kraken2
-- MEGAHIT
-- BWA
-- Bowtie2
+- KrakenTools
 - Minimap2
+- Bowtie2
 - Samtools
+- MEGAHIT
 - SeqKit
-- Python ≥ 3.8
+- BLAST+
+- SRA Toolkit
 - Biopython
+- Pigz
+- Wget
 
-## Requirements 2
+---
 
-### hg38 reference bundle
+## Docker version
+
+Only **Docker Desktop** is required.
+
+All dependencies are already included inside the ViralRiver Docker image.
+
+---
+
+# Reference resources
+
+Two Zenodo packages are available.
+
+## ViralRiver software
+
+Software DOI
+
+https://doi.org/10.5281/zenodo.20254960
+
+---
+
+## hg38 reference bundle
 
 A pre-indexed hg38 reference genome compatible with ViralRiver is available from Zenodo.
+
+https://doi.org/10.5281/zenodo.20255121
 
 Download:
 
 ```bash
 wget https://zenodo.org/records/20255121/files/ViralRiver_hg38_reference_bundle_v1.0.tar.gz
+
 tar -xzf ViralRiver_hg38_reference_bundle_v1.0.tar.gz
 ```
 
+---
+
 ## Included reference resources
 
-ViralRiver includes:
+The ViralRiver package also includes:
 
-- curated human core virome reference FASTA
-- prebuilt Minimap2 and Bowtie2 indexes
-- lightweight Kraken2 human-virus database
+- Curated human virome reference FASTA
+- Pre-built Minimap2 indexes
+- Pre-built Bowtie2 indexes
+- Lightweight Kraken2 viral database
 
-## Create environment
+# Create the Conda Environment
 
 ```bash
 conda env create -f environment.yml
 ```
 
-## Activate environment
+Activate the environment:
 
 ```bash
-conda activate viralriver
+conda activate ViralRiver
 ```
 
-## Verify installation
+Verify the installation:
 
 ```bash
 nextflow -version
 fastp --version
 kraken2 --version
+minimap2 --version
+bowtie2 --version
 ```
 
-## Input Format
+---
 
-FASTQ files should follow:
+# Set execution permissions (Linux/macOS)
+
+Before running ViralRiver for the first time, ensure that all shell scripts are executable.
+
+```bash
+chmod +x ViralRiver.module.*.sh
+chmod +x main.nf
+```
+
+---
+
+# Input Format
+
+ViralRiver accepts paired-end RNA-seq FASTQ files.
+
+Expected naming convention:
 
 ```text
-SAMPLE_1.fastq.gz
-SAMPLE_2.fastq.gz
+sample_1.fastq.gz
+sample_2.fastq.gz
 ```
 
-Example general `samples.csv`:
+Samples are specified through a CSV file.
+
+Example:
 
 ```csv
 sample,fastq_1,fastq_2
 SRR000001,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 SRR000002,/path/sample_1.fastq.gz,/path/sample_2.fastq.gz
 ```
-Example specific `samples.csv`: 
 
-```csv
-sample,fastq_1,fastq_2
-SRR15413671,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413671_2.fastq.gz
-SRR15413654,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_1.fastq.gz,/mnt/e/pipeline_test/HIV_test/vaccine/SRR15413654_2.fastq.gz
-```
+A single execution may contain one or many samples.
 
+Nextflow automatically schedules the analyses in parallel whenever computational resources are available.
 
+---
 
-## Example Public RNA-seq Datasets
+# Example Public RNA-seq datasets
 
-Example paired-end FASTQ files can be downloaded directly from the European Nucleotide Archive (ENA):
+Example paired-end RNA-seq datasets can be downloaded directly from the European Nucleotide Archive (ENA).
+
+Example 1
 
 ```bash
-# Example 1
-curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_1.fastq.gz"
-curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_2.fastq.gz"
+curl -O https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_1.fastq.gz
 
-# Example 2
-curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_1.fastq.gz"
-curl -O "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_2.fastq.gz"
+curl -O https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR169/024/SRR16948824/SRR16948824_2.fastq.gz
 ```
 
-Example `samples.csv`:
+Example 2
+
+```bash
+curl -O https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_1.fastq.gz
+
+curl -O https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR320/071/SRR32014171/SRR32014171_2.fastq.gz
+```
+
+Example samples.csv
 
 ```csv
 sample,fastq_1,fastq_2
@@ -165,49 +374,284 @@ SRR16948824,SRR16948824_1.fastq.gz,SRR16948824_2.fastq.gz
 SRR32014171,SRR32014171_1.fastq.gz,SRR32014171_2.fastq.gz
 ```
 
-## Run ViralRiver:
+---
+
+# Running ViralRiver
+
+## Command-line version
+
+Run ViralRiver using Nextflow:
 
 ```bash
 nextflow run main.nf \
-  --samples /path/to/samples.csv \
-  --host_ref /path/to/ref_hg38/hg38_full.fa \
-  --viral_fasta /path/to/viral_master/human.virus.selected.fasta \
-  --kraken_db /path/to/kraken_humanvirus_db \
+  --samples samples.csv \
+  --host_ref ref/hg38/hg38_full.fa \
+  --viral_fasta ref/core_virome/human.virus.selected.fasta \
+  --kraken_db ref/kraken_db \
+  --kraken_taxid 10239 \
+  --outdir results \
   -with-conda
 ```
 
-## Outputs
+Optional parameters include:
+
+- MAPQ threshold for Minimap2
+- MAPQ threshold for Bowtie2
+- Kraken TaxID
+- Output directory
+
+Refer to the documentation for additional options.
+
+---
+
+# Running ViralRiver using Docker
+
+The Docker version provides the easiest way to execute ViralRiver.
+
+Requirements:
+
+- Docker Desktop
+
+Download the Docker image:
+
+```bash
+docker pull viralriver:latest
+```
+
+Then simply execute
+
+```text
+viralriver.bat
+```
+
+The launcher automatically:
+
+- starts the ViralRiver Docker container;
+- mounts the current working directory;
+- allocates shared memory for Kraken2;
+- launches the Streamlit web interface;
+- opens the application in the default browser.
+
+The application becomes available at
+
+```text
+http://localhost:8501
+```
+
+No command-line interaction is required.
+
+---
+
+# Graphical Interface
+
+The Streamlit graphical interface allows users with limited computational experience to execute complete virome analyses.
+
+The interface provides:
+
+- Input file validation.
+- Parameter configuration.
+- Live monitoring of the pipeline.
+- Execution progress.
+- Automatic report generation.
+- Direct access to the MultiQC report.
+
+Insert here:
+
+**Figure 2. ViralRiver graphical interface.**
+
+---
+
+# Interactive MultiQC Report
+
+After the pipeline finishes, ViralRiver automatically generates
 
 ```text
 results/
-├── module1/
-│   ├── candidate reads
-│   ├── assembled contigs
-│   └── host-depleted viral contigs
-├── module2/
-│   ├── minimap2 viral counts
-│   ├── rescued viral reads
-│   └── BAM alignments
-└── module3/
-    ├── Bowtie2 rescue counts
-    ├── high-quality rescued reads
-    └── BAM alignments
+    viralriver_multiqc_report.html
 ```
 
-## Main output files
+The report summarizes the results produced by all modules except Kraken2.
+
+Unlike static reports, MultiQC allows users to interactively explore the data.
+
+Available features include:
+
+- Interactive bar plots.
+- Viral abundance comparison.
+- Minimap2 versus Bowtie2 comparison.
+- Publication-quality figure export (PNG, SVG, PDF).
+- Interactive tables.
+- Download of processed data.
+- Fast navigation through all samples.
+
+No additional software is required.
+
+Simply open
+
+```text
+viralriver_multiqc_report.html
+```
+
+using any modern web browser.
+
+Insert here:
+
+**Figure 3. MultiQC interactive report.**
+
+---
+
+# Output Directory Structure
+
+The pipeline generates the following directory structure.
+
+```text
+results/
+
+├── module1/
+│   ├── quality_control/
+│   ├── kraken2/
+│   ├── assembly/
+│   └── host_depletion/
+│
+├── module2/
+│   ├── minimap2/
+│   ├── viral_counts/
+│   └── bam/
+│
+├── module3/
+│   ├── bowtie2/
+│   ├── rescued_reads/
+│   └── bam/
+│
+├── module4/
+│   ├── rpm_table.tsv
+│   └── sequencing_depth.tsv
+│
+├── viralriver_multiqc_report.html
+│
+└── viralriver_multiqc_report_data/
+```
+
+---
+
+# Main Output Files
 
 | File | Description |
-|---|---|
-| `*_viral_counts.tsv` | Viral abundance table |
-| `*_rescued_viral_reads.fasta` | Viral rescued reads |
-| `*_host_depleted_viral_contigs.fasta` | Candidate assembled viral contigs |
-| `*_viral_aligned.bam` | Viral alignments |
-| `*_kraken_report.txt` | Kraken2 classification report |
+|------|-------------|
+| `*_viral_counts.tsv` | Viral abundance estimates obtained with Minimap2 |
+| `*_bowtie2_viral_counts.tsv` | Viral abundance after Bowtie2 rescue |
+| `*_rescued_viral_reads.fasta` | Rescued viral reads |
+| `*_host_depleted_viral_contigs.fasta` | Assembled candidate viral contigs |
+| `*.bam` | Viral alignments |
+| `rpm_table.tsv` | Reads per million normalization |
+| `viralriver_multiqc_report.html` | Interactive MultiQC report |
 
-## Citation
+---
 
-Caruz et al. ViralRiver: a modular workflow for RNA-seq virome characterization and viral rescue in host-dominated transcriptomic datasets.
+# Why ViralRiver?
 
-## License
+Compared with existing RNA-seq virome pipelines, ViralRiver provides:
 
-MIT License
+- End-to-end automated analysis.
+- Dual viral alignment using Minimap2 and Bowtie2.
+- Sensitive viral read rescue.
+- Multi-sample processing.
+- Interactive visualization.
+- Browser-based graphical interface.
+- Docker deployment.
+- Reproducible Nextflow workflow.
+- Automatic organization of all results.
+
+---
+
+# Frequently Asked Questions
+
+### Can ViralRiver analyse multiple samples?
+
+Yes.
+
+Simply include all paired-end datasets in the `samples.csv` file.
+
+Nextflow automatically schedules the analyses.
+
+---
+
+### Can I use another viral reference database?
+
+Yes.
+
+Any FASTA database compatible with Minimap2 and Bowtie2 can be used.
+
+---
+
+### Does ViralRiver work on Windows?
+
+Yes.
+
+The recommended option is the Docker graphical interface.
+
+---
+
+### Does ViralRiver work on Linux?
+
+Yes.
+
+Both the command-line and Docker versions are supported.
+
+---
+
+### Does ViralRiver generate publication-quality figures?
+
+Yes.
+
+The MultiQC report allows exporting figures in PNG, SVG and PDF formats.
+
+---
+
+# Citation
+
+If you use ViralRiver in your research, please cite:
+
+```text
+Caruz A. et al.
+
+ViralRiver: an accessible end-to-end workflow for RNA-seq virome profiling using dual viral alignment and interactive visualization.
+
+(Bioinformatics, under review)
+```
+
+Software DOI
+
+https://doi.org/10.5281/zenodo.20254960
+
+Reference bundle DOI
+
+https://doi.org/10.5281/zenodo.20255121
+
+---
+
+# License
+
+ViralRiver is distributed under the MIT License.
+
+---
+
+# Acknowledgements
+
+The authors thank all contributors involved in the development and testing of ViralRiver.
+
+The project has been developed to facilitate reproducible and accessible virome analyses from RNA-seq data for both bioinformaticians and experimental researchers.
+
+---
+
+# Roadmap
+
+Future releases are expected to include:
+
+- Additional viral reference databases.
+- Long-read RNA sequencing support.
+- Automatic taxonomic annotation.
+- Extended MultiQC visualizations.
+- Cloud deployment.
+- Galaxy integration.
+- Workflow benchmarking against additional virome pipelines.
