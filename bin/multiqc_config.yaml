@@ -1,6 +1,13 @@
+# ==============================================================================
 # MultiQC Configuration for ViralRiver
+# ==============================================================================
+
 title: "ViralRiver Quality Control Report"
-subtitle: "Viral detection pipeline"
+subtitle: "RNA-seq virome analysis pipeline"
+
+###############################################################################
+# Modules
+###############################################################################
 
 run_modules:
   - custom_content
@@ -12,41 +19,160 @@ exclude_modules:
   - kraken
   - kraken2
 
+###############################################################################
+# Display custom content first
+###############################################################################
+
 top_modules:
   - custom_content
 
-custom_content_search_rules:
+###############################################################################
+# Force viralriver_summary to appear before the other custom content sections
+# (by default custom_content sections are ordered alphabetically, which is
+# why summary_bowtie2 was showing up before summary_minimap2)
+###############################################################################
+
+custom_content:
+  order:
+    - viralriver_summary
+    - summary_minimap2
+    - summary_bowtie2
+
+###############################################################################
+# Search rules
+# NOTE: the correct MultiQC key is "sp:", not "custom_content_search_rules:".
+# summary_minimap2/summary_bowtie2 worked before only because files ending in
+# "_mqc.tsv" are auto-detected by MultiQC regardless of this section.
+# viralriver_summary.tsv doesn't follow that naming convention, so it needs an
+# explicit sp: rule.
+###############################################################################
+
+sp:
+
+  viralriver_summary:
+    fn: "viralriver_summary.tsv"
+
   summary_minimap2:
-    fn: 'summary_minimap2_mqc.tsv'
+    fn: "summary_minimap2_mqc.tsv"
 
   summary_bowtie2:
-    fn: 'summary_bowtie2_mqc.tsv'
+    fn: "summary_bowtie2_mqc.tsv"
+
+###############################################################################
+# Custom sections
+###############################################################################
 
 custom_data:
-  summary_minimap2:
-    file_format: 'tsv'
-    section_name: 'Viral Counts (Minimap2)'
-    description: 'Number of viral reads mapped using Minimap2.'
-    plot_type: 'bargraph'
+
+  ###########################################################################
+  # ViralRiver summary (main table, shown first)
+  ###########################################################################
+
+  viralriver_summary:
+
+    file_format: "tsv"
+
+    section_name: "ViralRiver Summary"
+
+    description: >
+      Overview per sample of viruses and reads detected by Minimap2 and
+      Bowtie2, and overall detection status.
+
+    plot_type: "table"
+
     pconfig:
-      id: 'summary_minimap2'
-      title: 'Viral Counts (Minimap2)'
-      ylab: 'Counts'
+
+      id: "viralriver_summary"
+
+      title: "ViralRiver Summary"
+
+      namespace: "ViralRiver"
+
+    headers:
+
+      Minimap2_viruses:
+        title: "Minimap2 viruses"
+        description: "Number of distinct viruses detected by Minimap2"
+        format: "{:,.0f}"
+
+      Minimap2_reads:
+        title: "Minimap2 reads"
+        description: "Total mapped viral reads (Minimap2)"
+        format: "{:,.0f}"
+
+      Bowtie2_viruses:
+        title: "Bowtie2 viruses"
+        description: "Number of distinct viruses rescued by Bowtie2"
+        format: "{:,.0f}"
+
+      Bowtie2_reads:
+        title: "Bowtie2 reads"
+        description: "Total rescued viral reads (Bowtie2)"
+        format: "{:,.0f}"
+
+      Total_viral_reads:
+        title: "Total viral reads"
+        description: "Sum of Minimap2 + Bowtie2 viral reads"
+        format: "{:,.0f}"
+
+      Status:
+        title: "Status"
+        description: "Overall virus detection status"
+
+  ###########################################################################
+  # Minimap2
+  ###########################################################################
+
+  summary_minimap2:
+
+    file_format: "tsv"
+
+    section_name: "Viral Counts (Minimap2)"
+
+    description: >
+      Number of mapped viral reads for each detected virus.
+
+    plot_type: "bargraph"
+
+    pconfig:
+
+      id: "summary_minimap2"
+
+      title: "Viral Counts (Minimap2)"
+
+      ylab: "Mapped reads"
+
       tt_decimals: 0
-      decimals: false
-      xDecimals: false
-      yDecimals: false
+
+      x_decimals: 0
+
+      y_decimals: 0
+
+  ###########################################################################
+  # Bowtie2
+  ###########################################################################
 
   summary_bowtie2:
-    file_format: 'tsv'
-    section_name: 'Viral Counts (Bowtie2)'
-    description: 'Number of viral reads rescued using Bowtie2.'
-    plot_type: 'bargraph'
+
+    file_format: "tsv"
+
+    section_name: "Viral Counts (Bowtie2)"
+
+    description: >
+      Number of rescued viral reads after sensitive Bowtie2 alignment.
+
+    plot_type: "bargraph"
+
     pconfig:
-      id: 'summary_bowtie2'
-      title: 'Viral Counts (Bowtie2)'
-      ylab: 'Counts'
+
+      id: "summary_bowtie2"
+
+      title: "Viral Counts (Bowtie2)"
+
+      ylab: "Rescued reads"
+
       tt_decimals: 0
-      decimals: false
-      xDecimals: false
-      yDecimals: false
+
+      x_decimals: 0
+
+      y_decimals: 0
