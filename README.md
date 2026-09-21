@@ -243,7 +243,7 @@ SRR16948824,SRR16948824_1.fastq.gz,SRR16948824_2.fastq.gz
 SRR32014171,SRR32014171_1.fastq.gz,SRR32014171_2.fastq.gz
 ```
 
-It is recommended to place these files in the samples directory.
+It is recommended to place these files in the examples directory.
 
 ---
 
