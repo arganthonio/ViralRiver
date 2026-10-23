@@ -13,7 +13,7 @@ workflow {
 
     Channel
         .fromPath(params.samples)
-        .splitCsv(header: true)
+        .splitCsv(header: true, sep: '\t')
         .map { row ->
             tuple(
                 row.sample,
