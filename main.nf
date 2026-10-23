@@ -7,22 +7,24 @@ workflow {
         error "Please provide host reference FASTA using --host_ref /path/to/host.fa"
     }
 
-    // 1. Detect the actual directory where the CSV file is located (e.g., .../ViralRiver-main2)
-    def csvFile = file(params.samples)
-    def csvDir = csvFile.parent
+    // 1. Resolve FASTQ paths relative to the TSV location, preserving absolute paths
+    
+    def samplesFile = file(params.samples)
+    def samplesDir = samplesFile.parent
 
     Channel
         .fromPath(params.samples)
         .splitCsv(header: true, sep: '\t')
         .map { row ->
+            def r1 = row.fastq_1.toString().trim()
+            def r2 = row.fastq_2.toString().trim()
             tuple(
                 row.sample,
-                file("${csvDir}/${row.fastq_1}"), // Force searching inside the directory where the CSV resides
-                file("${csvDir}/${row.fastq_2}")
+                file(r1.startsWith('/') ? r1 : "${samplesDir}/${r1}"),
+                file(r2.startsWith('/') ? r2 : "${samplesDir}/${r2}")
             )
         }
         .set { reads_ch }
-
     // Invoke the updated modules
     module1_out = MODULE1(reads_ch)
 
