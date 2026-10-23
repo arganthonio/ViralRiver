@@ -19,6 +19,7 @@ dependencies:
   - seqkit
   - blast
   - sra-tools
+  - multiqc
 
   - biopython
   - pigz
